@@ -36,12 +36,15 @@ rd /s /q updates
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/nougat/Nougat_lazy_Recovery.bat --no-check-certificate
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/oreo/Oreo_lazy_Recovery.bat --no-check-certificate
 files\wget.exe -p updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/RUN-ME-switcher-launcher.bat --no-check-certificate
-GOTO:EOF
+xcopy /y /s updates\Nougat_lazy_Recovery.bat files\nougat\Nougat_lazy_Recovery.bat
+xcopy /y /s updates\Oreo_lazy_Recovery.bat files\oreo\Oreo_lazy_Recovery.bat
+xcopy /y /s updates\RUN-ME-switcher-launcher.bat RUN-ME-switcher-launcher.bat
+start RUN-ME-switcher-launcher.bat
+exit
 :menu_2       Run
 if %str% equ 8 call scripts\oreo\Oreo_lazy_Recovery.bat
 if %str% equ 5 call scripts\nougat\Nougat_lazy_Recovery.bat
-pause
-exit
+GOTO:EOF
 
 :header  
 cls        
