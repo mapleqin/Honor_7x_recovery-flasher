@@ -15,8 +15,8 @@ set str=%emui:~10,1%
 echo.%str%
 pause
 :update
-files\wget.exe -P updates\first  https://raw.githubusercontent.com/mrmazakblu/*** --no-check-certificate
-files\wget.exe -P updates\second  https://raw.githubusercontent.com/mrmazakblu/*** --no-check-certificate
+files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/nougat/Nougat_lazy_Recovery.bat --no-check-certificate
+files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/oreo/Oreo_lazy_Recovery.bat --no-check-certificate
 ::rd /s /q updates
 :run
 if %str% equ 8 call scripts\oreo\Oreo_lazy_Recovery.bat
