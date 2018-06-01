@@ -14,12 +14,56 @@ echo good)
 set str=%emui:~10,1%
 echo.%str%
 pause
-:update
+:menuLOOP
+
+	call:header
+	::Print our header
+	::call:header
+	
+	::Load up our menu selections
+	echo.--------------------------------------------------------------------------------
+	for /f "tokens=1,2,* delims=_ " %%A in ('"C:/Windows/system32/findstr.exe /b /c:":menu_" "%~f0""') do echo.  %%B  %%C
+	
+	call:printstatus
+
+	set choice=
+	echo.&set /p choice= Please make a selection or hit ENTER to exit: ||GOTO:EOF
+	echo.&call:menu_%choice%
+	
+GOTO:menuLOOP
+:menu_1       Update
+rd /s /q updates
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/nougat/Nougat_lazy_Recovery.bat --no-check-certificate
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/oreo/Oreo_lazy_Recovery.bat --no-check-certificate
-::rd /s /q updates
-:run
+files\wget.exe -p updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/RUN-ME-switcher-launcher.bat --no-check-certificate
+GOTO:EOF
+:menu_2       Run
 if %str% equ 8 call scripts\oreo\Oreo_lazy_Recovery.bat
 if %str% equ 5 call scripts\nougat\Nougat_lazy_Recovery.bat
 pause
 exit
+
+:header  
+cls        
+color 0e
+echo.--------------------------------------------------------------------------------
+echo.
+::adb kill-server
+::adb start-server
+echo.--------------------------------------------------------------------------------
+adb devices
+timeout 5 > nul
+fastboot devices
+timeout 3 > nul
+::adb kill-server
+cls	
+color 0b
+GOTO:EOF
+
+:printstatus
+echo.
+echo. 
+echo. 
+echo. 
+echo.--------------------------------------------------------------------------------
+GOTO:EOF
