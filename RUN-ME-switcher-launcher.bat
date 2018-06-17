@@ -38,8 +38,16 @@ files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/RUN-ME-switcher-launcher.bat --no-check-certificate
 xcopy /y updates\Nougat_lazy_Recovery.bat scripts\nougat\Nougat_lazy_Recovery.bat
 xcopy /y updates\Oreo_lazy_Recovery.bat scripts\oreo\Oreo_lazy_Recovery.bat
-xcopy /y updates\RUN-ME-switcher-launcher.bat RUN-ME-switcher-launcher.bat
-start RUN-ME-switcher-launcher.bat
+echo @echo off > %~dp0updates\update.bat
+echo( >> %~dp0updates\update.bat
+echo timeout 5 >> %~dp0updates\update.bat
+echo echo f ^| xcopy /Y %~dp0RUN-ME-switcher-launcher.bat %~dp0RUN-ME-switcher-launcher.bak >> %~dp0updates\update.bat
+echo IF EXIST %~dp0updates\RUN-ME-switcher-launcher.bat echo f ^| xcopy /Y %~dp0updates\RUN-ME-switcher-launcher.bat %~dp0RUN-ME-switcher-launcher.bat >> %~dp0updates\update.bat
+echo timeout 5 >> %~dp0updates\RUN-ME-switcher-launcher.bat
+echo start %~dp0RUN-ME-switcher-launcher.bat >> %~dp0updates\update.bat
+echo pause >> %~dp0updates\update.bat
+echo exit >> %~dp0updates\update.bat
+start %~dp0updates\update.bat
 exit
 :menu_2       Run
 if %str% equ 8 call scripts\oreo\Oreo_lazy_Recovery.bat
