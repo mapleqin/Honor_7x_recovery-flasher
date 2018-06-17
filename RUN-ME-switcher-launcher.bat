@@ -33,7 +33,7 @@ pause
 GOTO:menuLOOP
 :menu_1       Update
 rd /s /q updates
-IF NOT EXIST "%~dp0update" mkdir "%~dp0update"
+IF NOT EXIST "%~dp0updates" mkdir "%~dp0updates"
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/nougat/Nougat_lazy_Recovery.bat --no-check-certificate
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/oreo/Oreo_lazy_Recovery.bat --no-check-certificate
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/RUN-ME-switcher-launcher.bat --no-check-certificate
