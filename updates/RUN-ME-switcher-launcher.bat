@@ -1,19 +1,19 @@
 @echo off
 if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
-MODE con:cols=58 lines=11
 title 		Lazy Recovery Auto Launcher
 echo Waiting For device to be recognized by ADB
 adb wait-for-device
 adb shell getprop ro.build.version.emui > %~dp0\version-info.txt
 for /f %%i in ('FINDSTR "EmotionUI_" %~dp0\version-info.txt') do set emui=%%i
-echo Output from ro.build.version.emui is = %emui%
+echo %emui%
 if "%emui%" equ "" (echo Version check Failed to determine OS Version
 echo This script will not work for you now. It will close
 pause
 exit)else (
-echo good version check)
+echo good)
 set str=%emui:~10,1%
-echo.EXTRACTED MAIN EMUI VERSION  %str%
+echo.%str%
+pause
 :menuLOOP
 
 	call:header
@@ -21,7 +21,7 @@ echo.EXTRACTED MAIN EMUI VERSION  %str%
 	::call:header
 	
 	::Load up our menu selections
-	echo.----------------------------------------------------
+	echo.--------------------------------------------------------------------------------
 	for /f "tokens=1,2,* delims=_ " %%A in ('"C:/Windows/system32/findstr.exe /b /c:":menu_" "%~f0""') do echo.  %%B  %%C
 	
 	call:printstatus
@@ -34,17 +34,11 @@ GOTO:menuLOOP
 :menu_1       Update
 rd /s /q updates
 IF NOT EXIST "%~dp0updates" mkdir "%~dp0updates"
-echo Getting Latest Nougat_lazy_Recovery.bat
-files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/nougat/Nougat_lazy_Recovery.bat --no-check-certificate 2> file1-download-log.txt
-echo Getting Latest Oreo_lazy_Recovery.bat
-files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/oreo/Oreo_lazy_Recovery.bat --no-check-certificate 2> file2-download-log.txt
-echo Getting Latest RUN-ME-switcher-launcher.bat
-files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/RUN-ME-switcher-launcher.bat --no-check-certificate 2> file3-download-log.txt
-echo Copying Latest Nougat_lazy_Recovery.bat over current version file
-echo Copying Latest Oreo_lazy_Recovery.bat over current version file
+files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/nougat/Nougat_lazy_Recovery.bat --no-check-certificate
+files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/oreo/Oreo_lazy_Recovery.bat --no-check-certificate
+files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/RUN-ME-switcher-launcher.bat --no-check-certificate
 xcopy /y updates\Nougat_lazy_Recovery.bat scripts\nougat\Nougat_lazy_Recovery.bat
 xcopy /y updates\Oreo_lazy_Recovery.bat scripts\oreo\Oreo_lazy_Recovery.bat
-echo Creating update file to update This batch file. This cmd window will close then reopen.
 echo @echo off > %~dp0updates\update.bat
 echo( >> %~dp0updates\update.bat
 echo timeout 5 >> %~dp0updates\update.bat
@@ -64,10 +58,16 @@ GOTO:EOF
 :header  
 cls        
 color 0e
-echo.----------------------------------------------------
-echo.           LOADING MENU OPTIONS
-echo.----------------------------------------------------
+echo.--------------------------------------------------------------------------------
+echo.
+::adb kill-server
+::adb start-server
+echo.--------------------------------------------------------------------------------
+adb devices
+timeout 5 > nul
+fastboot devices
 timeout 3 > nul
+::adb kill-server
 cls	
 color 0b
 GOTO:EOF
@@ -75,5 +75,7 @@ GOTO:EOF
 :printstatus
 echo.
 echo. 
-echo.----------------------------------------------------
+echo. 
+echo. 
+echo.--------------------------------------------------------------------------------
 GOTO:EOF
