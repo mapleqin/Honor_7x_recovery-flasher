@@ -47,14 +47,18 @@ xcopy /y updates\Oreo_lazy_Recovery.bat scripts\oreo\Oreo_lazy_Recovery.bat
 echo Creating update file to update This batch file. This cmd window will close then reopen.
 echo @echo off > %~dp0updates\update.bat
 echo( >> %~dp0updates\update.bat
+echo color 0e >> %~dp0updates\update.bat
+echo MODE con:cols=58 lines=11 >> %~dp0updates\update.bat
+echo title 		Lazy Recovery Auto Updater >> %~dp0updates\update.bat
 echo timeout 5 >> %~dp0updates\update.bat
 echo echo f ^| xcopy /Y %~dp0RUN-ME-switcher-launcher.bat %~dp0RUN-ME-switcher-launcher.bak >> %~dp0updates\update.bat
 echo IF EXIST %~dp0updates\RUN-ME-switcher-launcher.bat echo f ^| xcopy /Y %~dp0updates\RUN-ME-switcher-launcher.bat %~dp0RUN-ME-switcher-launcher.bat >> %~dp0updates\update.bat
 echo timeout 5 >> %~dp0updates\update.bat
 echo start %~dp0RUN-ME-switcher-launcher.bat >> %~dp0updates\update.bat
-echo timeout 5 >> %~dp0updates\update.bat
+echo timeout 3 >> %~dp0updates\update.bat
 echo exit >> %~dp0updates\update.bat
 start %~dp0updates\update.bat
+timeout 3
 exit
 :menu_2       Run
 if %str% equ 8 call scripts\oreo\Oreo_lazy_Recovery.bat
