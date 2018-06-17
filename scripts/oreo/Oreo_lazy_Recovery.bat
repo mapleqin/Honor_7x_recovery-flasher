@@ -1,6 +1,6 @@
 @echo off
 if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
-MODE con:cols=58 lines=11
+MODE con:cols=60 lines=21
 title 		Lazy Recovery Replace Oreo
 color 0e
 adb shell getprop ro.build.version.emui > %~dp0\version-info.txt
@@ -10,13 +10,14 @@ if "%emui%" equ "" (echo Version check Failed to determine OS Version
 echo This script will not work for you now. It will close
 pause
 exit)else (
-echo good)
+echo. )
 set str=%emui:~10%
 echo.%str%
-pause
+timeout 3
 if %str% lss 5.3 (goto nougat
 )else (
-echo ok to continue)
+echo Version Check Shows you are on EMUI%str% )
+echo Rebooting to bootloader mode to continue
 adb reboot bootloader
 echo Wait Here untill fastboot mode Loads On Phone
 SET PATH=%PATH%;"%~dp0\files\oreo"
@@ -27,7 +28,7 @@ for /f "tokens=3" %%i in ('findstr "^(bootloader)" "%~dp0\build-info.txt"') do s
 fastboot oem get-bootinfo 2> %~dp0\boot-info.txt
 for /f "tokens=2" %%i in ('findstr "^(bootloader)" "%~dp0\boot-info.txt"') do set status=%%i
 echo Your Current Device is = %Device% %Build% %status%
-pause
+timeout 3
 if %status% equ unlocked (goto MAIN
 )else (
 echo bootloader is not unlocked
@@ -39,20 +40,20 @@ pause
 cls
 echo 		 Choose what you need to work on.
 echo(
-echo                    %Device% %Build% %status%
-echo 		][************************************][
-echo 		][ 1.  complete_twrp_ramdisk          ][
-echo 		][************************************][
-echo 		][ 2.  Oreo Stock from beta           ][
-echo 		][************************************][
-echo 		][ 3.  twrp_p10_lite_0.3 Encryt works ][
-echo 		][************************************][
-echo 		][ 4.  Oreo No-Check                  ][
-echo 		][************************************][
-echo 		][ 5.  Local Image                    ][
-echo 		][************************************][
-echo 		][ 6.  Cancel Exit and Reboot         ][
-echo 		][************************************][
+echo            %Device% %Build% %status%
+echo 	][************************************][
+echo 	][ 1.  complete_twrp_ramdisk          ][
+echo 	][************************************][
+echo 	][ 2.  Oreo Stock from beta           ][
+echo 	][************************************][
+echo 	][ 3.  twrp_p10_lite_0.3 Encryt works ][
+echo 	][************************************][
+echo 	][ 4.  Oreo No-Check                  ][
+echo 	][************************************][
+echo 	][ 5.  Local Image                    ][
+echo 	][************************************][
+echo 	][ 6.  Cancel Exit and Reboot         ][
+echo 	][************************************][
 echo(
 echo  For performing Update simplest option is choose #1
 echo(

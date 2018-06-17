@@ -1,6 +1,6 @@
 @echo off
 if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
-MODE con:cols=58 lines=11
+MODE con:cols=60 lines=21
 title 		Lazy Recovery Replace Nougat
 color 0e
 adb shell getprop ro.build.version.emui > %~dp0\version-info.txt
@@ -10,13 +10,14 @@ if "%emui%" equ "" (echo Version check Failed to determine OS Version
 echo This script will not work for you now. It will close
 pause
 exit)else (
-echo good)
+echo. )
 set str=%emui:~10%
 echo.%str%
-pause
+timeout 3
 if %str% gtr 5.2 (goto oreo
 )else (
-echo ok to continue)
+echo Version Check Shows you are on EMUI%str% )											   
+echo Rebooting to bootloader mode to continue)
 adb reboot bootloader
 echo Wait Here untill fastboot mode Loads On Phone
 SET PATH=%PATH%;"%~dp0\files\nougat"
@@ -24,26 +25,37 @@ pause
 fastboot oem get-build-number 2> %~dp0\build-info.txt
 for /f "tokens=2" %%i in ('findstr "^(bootloader)" "%~dp0\build-info.txt"') do set Device=%%i
 for /f "tokens=3" %%i in ('findstr "^(bootloader)" "%~dp0\build-info.txt"') do set Build=%%i
+fastboot oem get-bootinfo 2> %~dp0\boot-info.txt
+for /f "tokens=2" %%i in ('findstr "^(bootloader)" "%~dp0\boot-info.txt"') do set status=%%i
 echo Your Current Device is = %Device% %Build%
+timeout 3
+if %status% equ unlocked (goto MAIN
+)else (
+echo bootloader is not unlocked
+echo Tool will now exit
+pause
+exit)
 pause
 :MAIN
 cls
 echo 		 Choose what you need to work on.
 echo(
-echo                    %Device% %Build%
-echo 		][************************************][
-echo 		][ 1.  twrp-honor                     ][
-echo 		][************************************][
-echo 		][ 2.  Stock Recovery                 ][
-echo 		][************************************][
-echo 		][ 3.  Stock Recovery 2               ][
-echo 		][************************************][
-echo 		][ 4.  BND-NO-CHECK                   ][
-echo 		][************************************][
-echo 		][ 5.  Other file from your PC        ][
-echo 		][************************************][
-echo 		][ 6.  Cancel Exit and Reboot         ][
-echo 		][************************************][
+echo               %Device% %Build% %status%
+echo 	][************************************][
+echo 	][ 1.  twrp-honor                     ][
+echo 	][************************************][
+echo 	][ 2.  Stock Recovery                 ][
+echo 	][************************************][
+echo 	][ 3.  Stock Recovery 2               ][
+echo 	][************************************][
+echo 	][ 4.  BND-NO-CHECK                   ][
+echo 	][************************************][
+echo 	][ 5.  Other file from your PC        ][
+echo 	][************************************][
+echo 	][ 6.  Cancel Exit and Reboot         ][
+echo 	][************************************][
+echo(
+echo  For performing Update simplest option is choose #1
 echo(
 set /p env=Type your option [1,2,3,4,5,6] then press ENTER: || set env="0"
 if /I %env%==1 set recovery=twrp-honor.img && goto flash

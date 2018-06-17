@@ -27,7 +27,7 @@ echo.EXTRACTED MAIN EMUI VERSION  %str%
 	call:printstatus
 
 	set choice=
-	echo.&set /p choice= Please make a selection or hit ENTER to exit: ||GOTO:EOF
+	echo.&set /p choice= Please make a selection or hit ENTER to exit: ||exit
 	echo.&call:menu_%choice%
 	
 GOTO:menuLOOP
