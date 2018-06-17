@@ -33,6 +33,7 @@ pause
 GOTO:menuLOOP
 :menu_1       Update
 rd /s /q updates
+IF NOT EXIST "%~dp0update" mkdir "%~dp0update"
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/nougat/Nougat_lazy_Recovery.bat --no-check-certificate
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/scripts/oreo/Oreo_lazy_Recovery.bat --no-check-certificate
 files\wget.exe -P updates  https://raw.githubusercontent.com/mrmazakblu/Honor_7x_recovery-flasher/master/RUN-ME-switcher-launcher.bat --no-check-certificate
@@ -45,7 +46,7 @@ echo echo f ^| xcopy /Y %~dp0RUN-ME-switcher-launcher.bat %~dp0RUN-ME-switcher-l
 echo IF EXIST %~dp0updates\RUN-ME-switcher-launcher.bat echo f ^| xcopy /Y %~dp0updates\RUN-ME-switcher-launcher.bat %~dp0RUN-ME-switcher-launcher.bat >> %~dp0updates\update.bat
 echo timeout 5 >> %~dp0updates\update.bat
 echo start %~dp0RUN-ME-switcher-launcher.bat >> %~dp0updates\update.bat
-echo pause >> %~dp0updates\update.bat
+echo timeout 5 >> %~dp0updates\update.bat
 echo exit >> %~dp0updates\update.bat
 start %~dp0updates\update.bat
 exit
