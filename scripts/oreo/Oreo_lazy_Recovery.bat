@@ -1,6 +1,8 @@
 @echo off
 if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
+MODE con:cols=58 lines=11
 title 		Lazy Recovery Replace Oreo
+color 0e
 adb shell getprop ro.build.version.emui > %~dp0\version-info.txt
 for /f %%i in ('FINDSTR "EmotionUI_" %~dp0\version-info.txt') do set emui=%%i
 echo %emui%
